@@ -636,7 +636,8 @@ FUNCTION {format.names} {                         % String Entry::format_names(S
       firstname * " " *                           %       result = result + firstname + " "
     } 'skip$ if$                                  %     }
     jrname empty$ not {                           %     if (! empty(jrname)) {
-      jrname * " " *                              %       result = result + jrname + " "
+      trim.end                                    %       result = trim_end(result);
+      ", " * jrname * " " *                       %       result = result + ", " + jrname + " "
     } 'skip$ if$                                  %     }
     trim.end                                      %     result = trim_end(result);
   } while$                                        %   }
