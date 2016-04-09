@@ -104,11 +104,11 @@ FUNCTION {cap.edition.zh} 		{"版"}
 FUNCTION {cap.anonymous.en} 	{"Anon"}
 FUNCTION {cap.anonymous.zh} 	{"佚名"}
 FUNCTION {cap.no.address.en} 	{"[S.l.]"}
-FUNCTION {cap.no.address.zh} 	{"[出版地不详]"}
+FUNCTION {cap.no.address.zh} 	{"［出版地不详］"}
 FUNCTION {cap.no.publisher.en} 	{"[s.n.]"}
-FUNCTION {cap.no.publisher.zh} 	{"[出版者不详]"}
+FUNCTION {cap.no.publisher.zh} 	{"［出版者不详］"}
 FUNCTION {cap.et.al.en} 		{", et~al"}
-FUNCTION {cap.et.al.zh} 		{", 等"}
+FUNCTION {cap.et.al.zh} 		{"，等"}
 FUNCTION {cap.translate.en} 	{"~trans"}
 FUNCTION {cap.translate.zh} 	{"译"}
 FUNCTION {cap.doi.url} 			{"http://dx.doi.org/"}
@@ -118,11 +118,18 @@ FUNCTION {cap.rd.en} 			{"rd"}
 FUNCTION {cap.th.en} 			{"th"}
 
 FUNCTION {cap.space}      {" "}
-FUNCTION {cap.period} 		{"\@. "}
-FUNCTION {cap.comma} 			{"\@, "}
-FUNCTION {cap.colon} 			{"\thinspace{}\textnormal{: }"}
+FUNCTION {cap.period.en} 	{"\@. "}
+FUNCTION {cap.period.zh}  {"．"}
+FUNCTION {cap.comma.en}   {"\@, "}
+FUNCTION {cap.comma.zh}   {"，"}
+FUNCTION {cap.colon.en} 	{"\thinspace{}\textnormal{: }"}
+FUNCTION {cap.colon.zh}   {"："}
 FUNCTION {cap.double.slash} 	{" //\thinspace{}"}
 FUNCTION {cap.dash} 			{"\thinspace{}\textnormal{--}\thinspace{}"}
+FUNCTION {cap.mark.left.en} {" ["}
+FUNCTION {cap.mark.right.en} {"]"}
+FUNCTION {cap.mark.left.zh} {"［"}
+FUNCTION {cap.mark.right.zh} {"］"}
 
 % Predefined latex command used to format the style of bibitems
 FUNCTION {env.bibbegin} 		{ "\begin{thebibliography}" }
@@ -479,13 +486,6 @@ FUNCTION {start.bibitem} {                        % void Entry::start_bibitem() 
                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
-FUNCTION {end.bibitem} {                          % void Entry::end_bibitem() {
-  cap.period write$                               %   write(cap_period);
-  newline$                                        %   writeln();
-}                                                 % }
-                                                  %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                                  %
 FUNCTION {is.in.chinese} {                        % int Entry::is_in_chinese() {
   language empty$ {                               %   if (empty(this.language)) {
     false                                         %     return false;
@@ -522,6 +522,63 @@ FUNCTION {set.mark} {                             % void Entry::set_mark(String 
     media empty$ not {                            %     if (! empty(this.media)) {
       mark "/" * media * 'mark :=                 %       this.mark = this.mark + "/" + this.media;
     } 'skip$ if$                                  %     }
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.period} {                           % String Entry::cap_period() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.period.zh                                 %     return cap_period_zh;
+  } {                                             %   } else {
+    cap.period.en                                 %     return cap_period_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.comma} {                            % String Entry::cap_comma() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.comma.zh                                  %     return cap_comma_zh;
+  } {                                             %   } else {
+    cap.comma.en                                  %     return cap_comma_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.colon} {                            % String Entry::cap_colon() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.colon.zh                                  %     return cap_colon_zh;
+  } {                                             %   } else {
+    cap.colon.en                                  %     return cap_colon_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {end.bibitem} {                          % void Entry::end_bibitem() {
+  cap.period write$                               %   write(cap_period);
+  newline$                                        %   writeln();
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.mark.left} {                        % String Entry::cap_mark_left() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.mark.left.zh                              %     return cap_mark_left_zh;
+  } {                                             %   } else {
+    cap.mark.left.en                              %     return cap_mark_left_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.mark.right} {                       % String Entry::cap_mark_right() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.mark.right.zh                             %     return cap_mark_right_zh;
+  } {                                             %   } else {
+    cap.mark.right.en                             %     return cap_mark_right_en;
   } if$                                           %   }
 }                                                 % }
                                                   %
@@ -719,7 +776,7 @@ FUNCTION {format.booktitle} {                     % String Emtry::format_booktit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
 FUNCTION {format.mark} {                          % String Emtry::format_mark(String mark) {
-  "[" swap$ * "]" *                               %   mark = "[" + mark + "]";
+  cap.mark.left swap$ * cap.mark.right *          %   mark = cap_mark_left + mark + cap_mark_right;
   "mark" format.bibinfo                           %   return format_bibinfo(mark, "mark");
 }                                                 % }
                                                   %
