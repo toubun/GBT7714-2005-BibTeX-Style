@@ -2,6 +2,9 @@
 \usepackage[hyphens]{url}
 \usepackage{dtklogos}
 \usepackage{blindtext}
+\makeatletter
+\renewcommand\@biblabel[1]{{\fontspec{MS PMincho}{[}}#1{\fontspec{MS PMincho}{]}}}
+\makeatother
 
 \begin{document}
 \title{测试GBT7714-2005.bst的排版效果}
