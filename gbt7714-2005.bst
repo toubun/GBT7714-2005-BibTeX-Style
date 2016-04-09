@@ -742,7 +742,7 @@ FUNCTION {format.names} {                         % String Entry::format_names(S
     } 'skip$ if$                                  %     }
     jrname empty$ not {                           %     if (! empty(jrname)) {
       trim.end                                    %       result = trim_end(result);
-      ", " * jrname * " " *                       %       result = result + ", " + jrname + " "
+      "{\fontspec{MS PMincho},} " * jrname * " " *%       result = result + ", " + jrname + " "
     } 'skip$ if$                                  %     }
     trim.end                                      %     result = trim_end(result);
   } while$                                        %   }
