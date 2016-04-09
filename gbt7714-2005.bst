@@ -626,9 +626,6 @@ FUNCTION {format.names} {                         % String Entry::format_names(S
     "u" change.case$ 'firstname :=                %     firstname = change_case(tmp, "u");
     namelist nameindex "{ll}" format.name$        %     tmp = format_name(namelist, nameindex, "{ll}");
     "u" change.case$ 'lastname :=                 %     lastname = change_case(tmp, "u");
-    jrname empty$ not {                           %     if (! empty(jrname)) {
-      jrname * " " *                              %       result = result + jrname + " "
-    } 'skip$ if$                                  %     }
     vonname empty$ not {                          %     if (! empty(vonname)) {
       vonname * " " *                             %       result = result + vonname + " "
     } 'skip$ if$                                  %     }
@@ -637,6 +634,9 @@ FUNCTION {format.names} {                         % String Entry::format_names(S
     } 'skip$ if$                                  %     }
     firstname empty$ not {                        %     if (! empty(firstname)) {
       firstname * " " *                           %       result = result + firstname + " "
+    } 'skip$ if$                                  %     }
+    jrname empty$ not {                           %     if (! empty(jrname)) {
+      jrname * " " *                              %       result = result + jrname + " "
     } 'skip$ if$                                  %     }
     trim.end                                      %     result = trim_end(result);
   } while$                                        %   }
