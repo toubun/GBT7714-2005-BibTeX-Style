@@ -52,7 +52,7 @@ ENTRY                                             % class Entry {
   series                                          %   String series;
   volume                                          %   String volume;
   number                                          %   String number;
-  version 										  %	  String version;
+  version                                         %	  String version;
   month                                           %   String month;
   school                                          %   String school;
   institution                                     %   String institution;
@@ -103,12 +103,12 @@ FUNCTION {cap.edition.en} 		{"~ed"}
 FUNCTION {cap.edition.zh} 		{"版"}
 FUNCTION {cap.anonymous.en} 	{"Anon"}
 FUNCTION {cap.anonymous.zh} 	{"佚名"}
-FUNCTION {cap.no.address.en} 	{"[S.l.]"}
-FUNCTION {cap.no.address.zh} 	{"［出版地不详］"}
-FUNCTION {cap.no.publisher.en} 	{"[s.n.]"}
-FUNCTION {cap.no.publisher.zh} 	{"［出版者不详］"}
-FUNCTION {cap.et.al.en} 		{", et~al"}
-FUNCTION {cap.et.al.zh} 		{"，等"}
+FUNCTION {cap.no.address.en} 	{"{\fontspec{MS PMincho}{[}}S{\fontspec{MS PMincho}.}l{\fontspec{MS PMincho}.{]}}"}
+FUNCTION {cap.no.address.zh} 	{"{\CJKfontspec{MS PMincho}［}出版地不详{\CJKfontspec{MS PMincho}］}"}
+FUNCTION {cap.no.publisher.en} 	{"{\fontspec{MS PMincho}{[}}s{\fontspec{MS PMincho}.}n{\fontspec{MS PMincho}.{]}}"}
+FUNCTION {cap.no.publisher.zh} 	{"{\CJKfontspec{MS PMincho}［}出版者不详{\CJKfontspec{MS PMincho}］}"}
+FUNCTION {cap.et.al.en} 		{"{\fontspec{MS PMincho},} et~al"}
+FUNCTION {cap.et.al.zh} 		{"{\CJKfontspec{MS PMincho}，}等"}
 FUNCTION {cap.translate.en} 	{"~trans"}
 FUNCTION {cap.translate.zh} 	{"译"}
 FUNCTION {cap.doi.url} 			{"http://dx.doi.org/"}
@@ -117,19 +117,27 @@ FUNCTION {cap.nd.en} 			{"nd"}
 FUNCTION {cap.rd.en} 			{"rd"}
 FUNCTION {cap.th.en} 			{"th"}
 
-FUNCTION {cap.space}      {" "}
-FUNCTION {cap.period.en} 	{"\@. "}
-FUNCTION {cap.period.zh}  {"．"}
-FUNCTION {cap.comma.en}   {"\@, "}
-FUNCTION {cap.comma.zh}   {"，"}
-FUNCTION {cap.colon.en} 	{"\thinspace{}\textnormal{: }"}
-FUNCTION {cap.colon.zh}   {"："}
-FUNCTION {cap.double.slash} 	{" //\thinspace{}"}
-FUNCTION {cap.dash} 			{"\thinspace{}\textnormal{--}\thinspace{}"}
-FUNCTION {cap.mark.left.en} {" ["}
-FUNCTION {cap.mark.right.en} {"]"}
-FUNCTION {cap.mark.left.zh} {"［"}
-FUNCTION {cap.mark.right.zh} {"］"}
+FUNCTION {cap.space}                  {" "}
+FUNCTION {cap.period.en}              {"\@{\fontspec{MS PMincho}.} "}
+FUNCTION {cap.period.zh}              {"{\CJKfontspec{MS PMincho}．}"}
+FUNCTION {cap.comma.en}               {"\@{\fontspec{MS PMincho},} "}
+FUNCTION {cap.comma.zh}               {"{\CJKfontspec{MS PMincho}，}"}
+FUNCTION {cap.colon.en}               {"\thinspace{}\textnormal{{\fontspec{MS PMincho}:} }"}
+FUNCTION {cap.colon.zh}               {"{\CJKfontspec{MS PMincho}：}"}
+FUNCTION {cap.double.slash}           {" {\fontspec{MS PMincho}/$\!$/}\thinspace{}"}
+FUNCTION {cap.dash}                   {"\thinspace{}\textnormal{--}\thinspace{}"}
+FUNCTION {cap.mark.left.en}           {" {\fontspec{MS PMincho}{[}}"}
+FUNCTION {cap.mark.right.en}          {"{\fontspec{MS PMincho}{]}}"}
+FUNCTION {cap.mark.left.zh}           {"{\CJKfontspec{MS PMincho}［}"}
+FUNCTION {cap.mark.right.zh}          {"{\CJKfontspec{MS PMincho}］}"}
+FUNCTION {cap.bracket.left.en}        {"{\fontspec{MS PMincho}(}"}
+FUNCTION {cap.bracket.right.en}       {"{\fontspec{MS PMincho})}"}
+FUNCTION {cap.squarebracket.left.en}  {"{\fontspec{MS PMincho}{[}}"}
+FUNCTION {cap.squarebracket.right.en} {"{\fontspec{MS PMincho}{]}}"}
+FUNCTION {cap.bracket.left.zh}        {"{\CJKfontspec{MS PMincho}（}"}
+FUNCTION {cap.bracket.right.zh}       {"{\CJKfontspec{MS PMincho}）}"}
+FUNCTION {cap.squarebracket.left.zh}  {"{\CJKfontspec{MS PMincho}［}"}
+FUNCTION {cap.squarebracket.right.zh} {"{\CJKfontspec{MS PMincho}］}"}
 
 % Predefined latex command used to format the style of bibitems
 FUNCTION {env.bibbegin} 		{ "\begin{thebibliography}" }
@@ -359,18 +367,6 @@ FUNCTION {add.brace} {                            % String Entry::add_brace(Stri
                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                   %
-FUNCTION {add.bracket} {                          % String Entry::bracket(String str) {
-  "(" swap$ * ")" *                               %   return "(" + str + ")";
-}                                                 % }
-                                                  %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                                  %
-FUNCTION {add.squarebracket} {                    % String Entry::add_squarebracket(String str) {
-  "[" swap$ * "]" *                               %   return "[" + str + "]";
-}                                                 % }
-                                                  %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                                  %
 FUNCTION {add.textit} {                           % String Entry::add_textit(String str) {
   "\textit{" swap$ * "}" *                        %   return "\textit{" + str + "}";
 }                                                 % }
@@ -517,7 +513,7 @@ FUNCTION {is.online} {                            % int Entry::is_online() {
 FUNCTION {set.mark} {                             % void Entry::set_mark(String mark) {
   'mark :=                                        %   this.mark = mark;
   is.online {                                     %   if (is_online()) {
-    mark "/OL" * 'mark :=                         %     this.mark = this.mark + "/OL";
+    mark "{\fontspec{MS PMincho}/}OL" * 'mark :=  %     this.mark = this.mark + "/OL";
   } {                                             %   } else {
     media empty$ not {                            %     if (! empty(this.media)) {
       mark "/" * media * 'mark :=                 %       this.mark = this.mark + "/" + this.media;
@@ -580,6 +576,58 @@ FUNCTION {cap.mark.right} {                       % String Entry::cap_mark_right
   } {                                             %   } else {
     cap.mark.right.en                             %     return cap_mark_right_en;
   } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.bracket.left} {                     % String Entry::cap_bracket_left() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.bracket.left.zh                           %     return cap_bracket_left_zh;
+  } {                                             %   } else {
+    cap.bracket.left.en                           %     return cap_bracket_left_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.bracket.right} {                    % String Entry::cap_bracket_right() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.bracket.right.zh                          %     return cap_bracket_right_zh;
+  } {                                             %   } else {
+    cap.bracket.right.en                          %     return cap_bracket_right_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.squarebracket.left} {               % String Entry::cap_squarebracket_left() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.squarebracket.left.zh                     %     return cap_squarebracket_left_zh;
+  } {                                             %   } else {
+    cap.squarebracket.left.en                     %     return cap_squarebracket_left_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {cap.squarebracket.right} {              % String Entry::cap_squarebracket_right() {
+  is.in.chinese {                                 %   if (is_in_chinese()) {
+    cap.squarebracket.right.zh                    %     return cap_squarebracket_right_zh;
+  } {                                             %   } else {
+    cap.squarebracket.right.en                    %     return cap_squarebracket_right_en;
+  } if$                                           %   }
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {add.bracket} {                          % String Entry::bracket(String str) {
+  cap.bracket.left swap$ * cap.bracket.right *    %   return cap_bracket_left + str + cap_bracket_right;
+}                                                 % }
+                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                  %
+FUNCTION {add.squarebracket} {                    % String Entry::add_squarebracket(String str) {
+  cap.squarebracket.left swap$ * cap.squarebracket.right * %   return cap_squarebracket_left + str + cap_squarebracket_right;
 }                                                 % }
                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
